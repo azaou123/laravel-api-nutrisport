@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type'
     ];
 
     /**
@@ -44,5 +45,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    // Relationships
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    // Helpers
+    public function isAgent(): bool
+    {
+        return $this->type === 'agent';
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->type === 'customer';
     }
 }
