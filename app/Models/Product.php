@@ -15,8 +15,7 @@ class Product extends Model
     public function sites()
     {
         return $this->belongsToMany(Site::class)
-            ->withPivot('price')
-            ->withTimestamps();
+            ->withPivot('price');
     }
 
     public function orderItems()
