@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // You can leave this empty; do NOT try to register middleware here
         $middleware->appendToGroup('api', SetSite::class);
+        $middleware->alias([
+            'set.site' => \App\Http\Middleware\SetSite::class,
+            'agent'    => \App\Http\Middleware\AgentMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
