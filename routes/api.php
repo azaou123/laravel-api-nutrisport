@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Middleware\SetSite;
 
 
@@ -20,6 +21,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('change-password', [AuthController::class, 'changePassword']);
+
+    // Orders Placement 
+    Route::post('/orders', [OrderController::class, 'store']);
 });
 
 Route::get('/products', [ProductController::class, 'index']);
