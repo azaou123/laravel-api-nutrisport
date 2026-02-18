@@ -10,11 +10,16 @@ Route::get('/hello', function () {
     return response()->json(['message' => 'API fonctionne']);
 });
 
+Route::post('register', [AuthController::class, 'register']);
 Route::post('login/customer', [AuthController::class, 'loginCustomer']);
 Route::post('login/agent', [AuthController::class, 'loginAgent']);
-Route::post('logout', [AuthController::class, 'logout']);
-Route::post('refresh', [AuthController::class, 'refresh']);
-Route::get('me', [AuthController::class, 'me']);
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('me', [AuthController::class, 'me']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('change-password', [AuthController::class, 'changePassword']);
+});
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
