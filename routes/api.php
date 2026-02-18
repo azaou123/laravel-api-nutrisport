@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\BackOfficeController;
+use App\Http\Controllers\Api\FeedController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,3 +56,18 @@ Route::middleware(['auth:api', 'agent'])->prefix('backoffice')->group(function (
     Route::get('/orders/recent', [BackOfficeController::class, 'recentOrders']);
     Route::post('/products', [BackOfficeController::class, 'createProduct']);
 });
+
+/*
+|--------------------------------------------------------------------------
+| Public Catalogue Feeds (JSON & XML)
+|--------------------------------------------------------------------------
+*/
+Route::get('/feeds', function () {
+    return response()->json([
+        'json' => url('/api/feeds/json'),
+        'xml'  => url('/api/feeds/xml'),
+    ]);
+});
+
+Route::get('/feeds/{format}', [FeedController::class, '__invoke'])
+    ->whereIn('format', ['json', 'xml']);
