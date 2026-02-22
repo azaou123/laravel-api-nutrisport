@@ -1,0 +1,63 @@
+version: "3.9"
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: nutrisport_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    depends_on:
+      - db
+      - redis
+    networks:
+      - nutri
+
+  nginx:
+    image: nginx:alpine
+    container_name: nutrisport_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+    depends_on:
+      - app
+    networks:
+      - nutri
+
+  db:
+    image: mysql:8.0
+    container_name: nutrisport_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nutrisport
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3308:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - nutri
+
+  redis:
+    image: redis:alpine
+    container_name: nutrisport_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - nutri
+
+networks:
+  nutri:
+
+volumes:
+  dbdata:
