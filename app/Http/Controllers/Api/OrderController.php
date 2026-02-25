@@ -123,7 +123,7 @@ class OrderController extends Controller
         Mail::to($user->email)->send(new OrderConfirmationCustomer($order, $cart));
 
         // Email à l'administrateur (adresse définie dans .env)
-        $adminEmail = env('ADMIN_EMAIL', 'admin@nutrisport.com');
+        $adminEmail = env('MAIL_ADMIN', 'admin@nutrisport.com');
         Mail::to($adminEmail)->send(new OrderConfirmationAdmin($order, $cart));
     }
 
