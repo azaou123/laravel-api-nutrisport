@@ -33,6 +33,7 @@ Route::post('/login/agent', [AuthController::class, 'loginAgent']);
 
 Route::middleware('jwt.auth')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
+    Route::post('update-profile', [AuthController::class, 'updateProfile']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('change-password', [AuthController::class, 'changePassword']);

@@ -171,4 +171,25 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Password updated successfully']);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE PROFILE
+    |--------------------------------------------------------------------------
+    */    
+    public function updateProfile(Request $request){
+        $user = JWTAuth::user();
+        $request->validate([
+            'name'  => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+        ]);
+        if($request->has('name')){
+            $user->name = $request->name;
+        }
+        if($request->has('email')){
+            $user->email = $request->email;
+        }
+        $user->save();
+        return response()->json(['message' => 'Profile Updated Successfully', 'user'=>$user]);
+    }
 }
