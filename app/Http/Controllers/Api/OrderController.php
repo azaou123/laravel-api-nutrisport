@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderConfirmationCustomer;
 use App\Mail\OrderConfirmationAdmin;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class OrderController extends Controller
 {
@@ -124,5 +125,20 @@ class OrderController extends Controller
         // Email à l'administrateur (adresse définie dans .env)
         $adminEmail = env('ADMIN_EMAIL', 'admin@nutrisport.com');
         Mail::to($adminEmail)->send(new OrderConfirmationAdmin($order, $cart));
+    }
+
+    public function history(){
+        $user = JWTAuth::user();
+        $orders = $user->orders()->orderBy('created_at', 'desc')->get()->map(function($order) {
+            return [
+                'id'      => $order->id,
+                'total'   => $order->total,
+                'status'  => $order->status,
+                'items'   => $order->items, // JSON array of products
+                'date'    => $order->created_at->toDateTimeString(),
+            ];
+        });
+
+        return response()->json(['orders' => $orders]);
     }
 }
