@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Services\FeedGenerators\JsonFeedGenerator;
 use App\Services\FeedGenerators\XmlFeedGenerator;
+use App\Services\FeedGenerators\CsvFeedGenerator;
 use Illuminate\Http\Request;
 
 class FeedController extends Controller
@@ -16,6 +17,7 @@ class FeedController extends Controller
     protected array $generators = [
         'json' => JsonFeedGenerator::class,
         'xml'  => XmlFeedGenerator::class,
+        'csv'  => CsvFeedGenerator::class,
     ];
 
     /**

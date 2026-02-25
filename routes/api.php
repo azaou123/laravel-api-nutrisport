@@ -68,8 +68,9 @@ Route::get('/feeds', function () {
     return response()->json([
         'json' => url('/api/feeds/json'),
         'xml'  => url('/api/feeds/xml'),
+        'csv'  => url('/api/feeds/csv'),
     ]);
 });
 
 Route::get('/feeds/{format}', [FeedController::class, '__invoke'])
-    ->whereIn('format', ['json', 'xml']);
+    ->whereIn('format', ['json', 'xml', 'csv']);
