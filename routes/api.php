@@ -31,11 +31,13 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login/customer', [AuthController::class, 'loginCustomer']);
 Route::post('/login/agent', [AuthController::class, 'loginAgent']);
 
-Route::middleware('auth:api')->group(function () {
-    Route::get('/me', [AuthController::class, 'me']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::post('/change-password', [AuthController::class, 'changePassword']);
+Route::middleware('jwt.auth')->group(function () {
+    Route::get('me', [AuthController::class, 'me']);
+    Route::post('update-profile', [AuthController::class, 'updateProfile']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('change-password', [AuthController::class, 'changePassword']);
+    Route::get('myOrders', [OrderController::class, 'history']);
 });
 
 /*
@@ -66,8 +68,9 @@ Route::get('/feeds', function () {
     return response()->json([
         'json' => url('/api/feeds/json'),
         'xml'  => url('/api/feeds/xml'),
+        'csv'  => url('/api/feeds/csv'),
     ]);
 });
 
 Route::get('/feeds/{format}', [FeedController::class, '__invoke'])
-    ->whereIn('format', ['json', 'xml']);
+    ->whereIn('format', ['json', 'xml', 'csv']);
